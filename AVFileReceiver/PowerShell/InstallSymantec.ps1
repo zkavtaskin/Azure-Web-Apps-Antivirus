@@ -17,7 +17,7 @@ Install-Module Azure
 Add-AzureAccount
 
 $vm = Get-AzureVM -ServiceName $CSName -Name $VMName
-write-host $vm.VM.ProvisionGuestAgent
+$vm.VM.ProvisionGuestAgent
 
 $Agent = Get-AzureVMAvailableExtension -Publisher Symantec -ExtensionName SymantecEndpointProtection
 
