@@ -3,6 +3,8 @@
 **Repository objective:** 
 To provide affordable real-time malware upload/download scanning concept that requires no changes to be made to your application.
 
+![alt text](READMEArtefacts/Antivirus.jpg "Azure Web Apps Antivirus")
+
 ## Setup Instructions
 
 ### Step 1 - Create and Setup Azure VM
