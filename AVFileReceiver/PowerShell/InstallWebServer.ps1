@@ -37,3 +37,6 @@ Enable-PSRemoting -SkipNetworkProfileCheck
 
 Start-DscConfiguration -Path .\AVFileReceiver –ComputerName "localhost" -Wait -Force -Verbose
 
+# Final manual step:
+# In IIS change DefaultAppPool identity to LocalSystem 
+# if you don't do this you will not be able to invoke Symantec command line interface 
