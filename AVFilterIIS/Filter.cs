@@ -23,7 +23,7 @@ namespace AVFilterIIS
             
             if(httpResponse.ContentType == "application/octet-stream")
             {
-                var filter = httpResponse.Filter as ReadWriteProxyStream;
+                ReadWriteProxyStream filter = httpResponse.Filter as ReadWriteProxyStream;
 
                 if (filter != null)
                 {
@@ -92,7 +92,8 @@ namespace AVFilterIIS
                     filePath
                     );
 
-                bool fileIsSafe = Convert.ToBoolean(UTF8Encoding.UTF8.GetString(response));
+                string text = UTF8Encoding.UTF8.GetString(response);
+                bool fileIsSafe = Convert.ToBoolean(text);
 
                 if (!fileIsSafe)
                 {

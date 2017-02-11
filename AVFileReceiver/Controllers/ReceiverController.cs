@@ -20,62 +20,34 @@ namespace AVFileReceiver.Controllers
         {
             bool response = true;
 
-            var httpRequest = HttpContext.Current.Request;
+            HttpRequest httpRequest = HttpContext.Current.Request;
             HttpPostedFile file = httpRequest.Files[0];
 
-            string fakeVirusText = "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*";
-
             string filePath = $"{WebConfigurationManager.AppSettings["UploadDirectory"]}\\{Guid.NewGuid()}_{file.FileName}";
-            string filePathAUnknown = filePath + "A";
-            string filePathBControl = filePath + "B";
-            string filePathCUnknown = filePath + "C";
-            string filePathDControl = filePath + "D";
 
             try
             {
-                file.SaveAs(filePathAUnknown);
+                file.SaveAs(filePath);
 
-                using (StreamWriter writer = new StreamWriter(filePathBControl))
+                using (Process process = Process.Start(
+                    "C:\\Program Files (x86)\\Symantec\\Symantec Endpoint Protection\\DoScan.exe",
+                    "/ScanFile " + filePath))
                 {
-                    writer.WriteLine(fakeVirusText);
+                    process.WaitForExit();
                 }
 
-                file.SaveAs(filePathCUnknown);
-
-                using (StreamWriter writer = new StreamWriter(filePathDControl))
-                {
-                    writer.WriteLine(fakeVirusText);
-                }
-
-
-                while(File.Exists(filePathBControl) && File.Exists(filePathDControl))
-                {
-                    Thread.Sleep(100);
-                }
-
-                if(!File.Exists(filePathAUnknown) || !File.Exists(filePathCUnknown))
-                {
-                    response = false;
-                }
+                if (!File.Exists(filePath))
+                    response = false; 
             }
             catch(Exception)
             {
-                response = false;
+                throw;
                 //Log error
             }
             finally
             {
-                if(File.Exists(filePathAUnknown))
-                    File.Delete(filePathAUnknown);
-
-                if(File.Exists(filePathBControl))
-                    File.Delete(filePathBControl);
-
-                if (File.Exists(filePathCUnknown))
-                    File.Delete(filePathCUnknown);
-
-                if(File.Exists(filePathDControl))
-                    File.Delete(filePathDControl);
+                if(File.Exists(filePath))
+                    File.Delete(filePath);
             }
 
             return response;
