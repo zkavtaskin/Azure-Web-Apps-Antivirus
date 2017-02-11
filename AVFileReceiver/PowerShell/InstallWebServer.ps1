@@ -1,3 +1,5 @@
+# Run this in PowerShell ISE (Admin mode)
+
 Configuration AVFileReceiver 
 { 
   param(
